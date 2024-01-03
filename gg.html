@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cats vs Dogs Classification</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cats vs Dogs Classification</h1>
+    <input type="file" id="imageUpload" accept=".jpg, .jpeg, .png" />
+    <button onclick="predictImage()">Predict</button>
+    <div id="result"></div>
+
+    <script>
+        async function predictImage() {
+            const fileInput = document.getElementById('imageUpload');
+            const resultDiv = document.getElementById('result');
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/predict', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                console.log('Response:', response); // Log the response details
+
+                const data = await response.json();
+                resultDiv.innerText = `Prediction: ${data.prediction}`;
+            } catch (error) {
+                console.error('Error predicting image:', error);
+                resultDiv.innerText = 'Error predicting image. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>
